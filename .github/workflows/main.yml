@@ -366,17 +366,9 @@ jobs:
             fi
           done
           test "$MIRYOKU_DEBUG" = 'MIRYOKU_DEBUG_TRUE' && cp "${GITHUB_WORKSPACE}/zmk/app/build/zephyr/.config" "${{ steps.main.outputs.artifact_dir }}"
-          echo "::endgroup::"
-      - name: Sanitize Artifact Name
-        run: |
-          # Replace all forward slashes with hyphens
-          SAFE_NAME="${steps.main.outputs.run_name//\//-}"
-          
-          # Save it to the GitHub Environment file
-          echo "ARTIFACT_NAME=${SAFE_NAME}" >> $GITHUB_ENV    
+          echo "::endgroup::"   
       - name: upload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{ steps.main.outputs.run_name }}
           path: ${{ steps.main.outputs.artifact_dir }}
-
